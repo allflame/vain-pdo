@@ -16,14 +16,14 @@
     },
     "require": {
         "php": ">=7.0",
-        "vain/connection": "^0.2",
-        "vain/core": "^0.2",
-        "vain/database": "^0.2"
+        "vain/connection": "^0.3",
+        "vain/core": "^0.3",
+        "vain/database": "^0.3"
     },
     "repositories": [
         {
             "type": "composer",
-            "url": "http://78.47.118.217"
+            "url": "http://78.140.176.167"
         }
     ],
     "config": {
