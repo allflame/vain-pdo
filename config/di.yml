@@ -1,0 +1,19 @@
+parameters:
+  pdo.database: 'mvcc'
+
+services:
+  database.mvcc:
+    class: PdoAdapter
+    factory: ['@database.storage', getDatabase]
+    arguments:
+      - '%pdo.database%'
+  connection.factory.pdo:
+    class: Vain\Pdo\Factory\PdoConnectionFactory
+    arguments: ['pdo']
+    tags:
+      - {name: connection.factory}
+  database.factory.pdo:
+    class: Vain\Pdo\Factory\PdoDatabaseFactory
+    arguments: ['@database.generator.factory', 'pdo']
+    tags:
+      - {name: database.factory}
