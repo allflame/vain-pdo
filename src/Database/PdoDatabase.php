@@ -10,10 +10,12 @@
  */
 declare(strict_types = 1);
 
-namespace Vain\Pdo;
+namespace Vain\Pdo\Database;
 
 use Vain\Database\AbstractDatabase;
 use Vain\Database\Exception\LevelIntegrityDatabaseException;
+use Vain\Database\Mvcc\MvccDatabaseInterface;
+use Vain\Pdo\Connection\PdoConnectionInterface;
 use Vain\Pdo\Exception\CommunicationPdoDatabaseException;
 use Vain\Pdo\Exception\QueryPdoDatabaseException;
 use Vain\Database\Generator\Factory\GeneratorFactoryInterface;
@@ -25,9 +27,9 @@ use Vain\Pdo\Cursor\PdoCursor;
  *
  * @author Taras P. Girnyk <taras.p.gyrnik@gmail.com>
  */
-class PdoAdapter extends AbstractDatabase
+class PdoDatabase extends AbstractDatabase implements MvccDatabaseInterface
 {
-    private $pdoInstance;
+    private $pdoConnection;
 
     private $level;
 
@@ -35,22 +37,22 @@ class PdoAdapter extends AbstractDatabase
      * PDOAdapter constructor.
      *
      * @param GeneratorFactoryInterface $generatorFactory
-     * @param \PDO                      $pdoInstance
+     * @param PdoConnectionInterface    $pdoConnection
      */
     public function __construct(
         GeneratorFactoryInterface $generatorFactory,
-        \PDO $pdoInstance
+        PdoConnectionInterface $pdoConnection
     ) {
-        $this->pdoInstance = $pdoInstance;
+        $this->pdoConnection = $pdoConnection;
         parent::__construct($generatorFactory);
     }
 
     /**
-     * @return \PDO
+     * @return PdoConnectionInterface
      */
-    public function getPdoInstance() : \PDO
+    public function getPdoConnection() : PdoConnectionInterface
     {
-        return $this->pdoInstance;
+        return $this->pdoConnection;
     }
 
     /**
@@ -75,7 +77,7 @@ class PdoAdapter extends AbstractDatabase
             throw new LevelIntegrityDatabaseException($this, $this->level);
         }
         try {
-            return $this->pdoInstance->beginTransaction();
+            return $this->pdoConnection->establish()->beginTransaction();
         } catch (\PDOException $e) {
             throw new CommunicationPDODatabaseException($this, $e);
         }
@@ -95,7 +97,7 @@ class PdoAdapter extends AbstractDatabase
             throw new LevelIntegrityDatabaseException($this, $this->level);
         }
         try {
-            return $this->pdoInstance->commit();
+            return $this->pdoConnection->establish()->commit();
         } catch (\PDOException $e) {
             throw new CommunicationPDODatabaseException($this, $e);
         }
@@ -115,7 +117,7 @@ class PdoAdapter extends AbstractDatabase
             throw new LevelIntegrityDatabaseException($this, $this->level);
         }
         try {
-            return $this->pdoInstance->rollBack();
+            return $this->pdoConnection->establish()->rollBack();
         } catch (\PDOException $e) {
             throw new CommunicationPDODatabaseException($this, $e);
         }
@@ -124,9 +126,9 @@ class PdoAdapter extends AbstractDatabase
     /**
      * @inheritDoc
      */
-    public function runQuery($query, array $bindParams) : GeneratorInterface
+    public function runQuery($query, array $bindParams, array $bindParamTypes = []) : GeneratorInterface
     {
-        $statement = $this->pdoInstance->prepare($query);
+        $statement = $this->pdoConnection->establish()->prepare($query);
         if (false == $statement->execute($bindParams)) {
             throw new QueryPDODatabaseException($this, $statement->errorCode(), $statement->errorInfo());
         }

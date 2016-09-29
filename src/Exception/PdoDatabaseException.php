@@ -13,7 +13,7 @@ declare(strict_types = 1);
 namespace Vain\Pdo\Exception;
 
 use Vain\Database\Exception\DatabaseException;
-use Vain\Pdo\PdoAdapter;
+use Vain\Pdo\Database\PdoDatabase;
 
 /**
  * Class PdoDatabaseException
@@ -25,12 +25,12 @@ class PdoDatabaseException extends DatabaseException
     /**
      * PDODatabaseException constructor.
      *
-     * @param PdoAdapter    $database
+     * @param PdoDatabase   $database
      * @param string        $errorCode
      * @param string        $errorMessage
      * @param \PDOException $e
      */
-    public function __construct(PdoAdapter $database, string $errorCode, string $errorMessage, \PDOException $e = null)
+    public function __construct(PdoDatabase $database, string $errorCode, string $errorMessage, \PDOException $e = null)
     {
         parent::__construct(
             $database,
