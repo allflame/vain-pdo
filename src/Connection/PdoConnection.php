@@ -12,7 +12,6 @@
 namespace Vain\Pdo\Connection;
 
 use Vain\Connection\AbstractConnection;
-use Vain\Connection\Exception\NoRequiredFieldException;
 
 /**
  * Class PdoConnection
@@ -25,17 +24,9 @@ class PdoConnection extends AbstractConnection implements PdoConnectionInterface
      * @param array $config
      *
      * @return array
-     *
-     * @throws NoRequiredFieldException
      */
     protected function getCredentials(array $config) : array
     {
-        foreach (['driver', 'host', 'port', 'dbname', 'username', 'password'] as $requiredField) {
-            if (false === array_key_exists($requiredField, $config)) {
-                throw new NoRequiredFieldException($this, $requiredField);
-            }
-        }
-
         if (false === array_key_exists('sslmode', $config)) {
             $sslmode = '';
         } else {

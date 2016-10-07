@@ -1,5 +1,6 @@
 parameters:
   pdo.database: 'mvcc'
+  pdo.config.required.fields: ['driver', 'host', 'port', 'dbname', 'username', 'password']
 
 services:
   database.mvcc:
@@ -7,11 +8,16 @@ services:
     factory: ['@database.storage', getDatabase]
     arguments:
       - '%pdo.database%'
-  connection.factory.pdo:
+  connection.factory.pdo.trust:
     class: Vain\Pdo\Factory\PdoConnectionFactory
     arguments: ['pdo']
     tags:
       - {name: connection.factory}
+  connection.factory.pdo.assert:
+    class: Vain\Connection\Factory\Decorator\Assert\ConnectionFactoryAssertDecorator
+    decorates: connection.factory.pdo.trust
+    arguments: ['@connection.factory.pdo.assert.inner', '%pdo.config.required.fields%']
+  connection.factory.pdo: '@connection.factory.pdo.assert'
   database.factory.pdo:
     class: Vain\Pdo\Factory\PdoDatabaseFactory
     arguments: ['@database.generator.factory', 'pdo']
