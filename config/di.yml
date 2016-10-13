@@ -15,8 +15,7 @@ services:
       - {name: connection.factory}
   connection.factory.pdo.assert:
     class: Vain\Connection\Factory\Decorator\Assert\ConnectionFactoryAssertDecorator
-    decorates: connection.factory.pdo.trust
-    arguments: ['@connection.factory.pdo.assert.inner', '%pdo.config.required.fields%']
+    arguments: ['@connection.factory.pdo.trust', '%pdo.config.required.fields%']
   connection.factory.pdo: '@connection.factory.pdo.assert'
   database.factory.pdo:
     class: Vain\Pdo\Factory\PdoDatabaseFactory
