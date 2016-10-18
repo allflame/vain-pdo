@@ -34,7 +34,7 @@ class PdoConnection extends AbstractConnection implements PdoConnectionInterface
         }
 
         return [
-            $config['driver'],
+            $config['type'],
             $config['host'],
             $config['port'],
             $config['dbname'],
@@ -48,9 +48,9 @@ class PdoConnection extends AbstractConnection implements PdoConnectionInterface
      */
     public function doConnect(array $configData)
     {
-        list ($driver, $host, $port, $dbname, $username, $password, $sslmode) = $this->getCredentials($configData);
+        list ($type, $host, $port, $dbname, $username, $password, $sslmode) = $this->getCredentials($configData);
 
-        $dsn = sprintf('%s:host=%s;port=%d;dbname=%s', $driver, $host, $port, $dbname);
+        $dsn = sprintf('%s:host=%s;port=%d;dbname=%s', $type, $host, $port, $dbname);
 
         if ('' !== $sslmode) {
             $dsn .= sprintf(';sslmode=%s', $sslmode);

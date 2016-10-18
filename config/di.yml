@@ -1,6 +1,6 @@
 parameters:
   pdo.database: 'mvcc'
-  pdo.config.required.fields: ['driver', 'host', 'port', 'dbname', 'username', 'password']
+  pdo.config.required.fields: ['type', 'host', 'port', 'dbname', 'username', 'password']
 
 services:
   database.mvcc:
