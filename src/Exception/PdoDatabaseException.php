@@ -25,18 +25,16 @@ class PdoDatabaseException extends DatabaseException
     /**
      * PDODatabaseException constructor.
      *
-     * @param PdoDatabase   $database
-     * @param string        $errorCode
-     * @param string        $errorMessage
+     * @param PdoDatabase $database
+     * @param string $errorCode
+     * @param string $errorMessage
      * @param \PDOException $e
      */
     public function __construct(PdoDatabase $database, string $errorCode, string $errorMessage, \PDOException $e = null)
     {
         parent::__construct(
             $database,
-            sprintf('Unable to communicate to the database: %d - %s', $errorCode, $errorMessage),
-            0,
-            $e
+            sprintf('Unable to communicate to the database: %d - %s', $errorCode, $errorMessage)
         );
     }
 }
