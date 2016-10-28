@@ -11,12 +11,13 @@ services:
   connection.factory.pdo.trust:
     class: Vain\Pdo\Factory\PdoConnectionFactory
     arguments: ['pdo']
-    tags:
-      - {name: connection.factory}
   connection.factory.pdo.assert:
     class: Vain\Connection\Factory\Decorator\Assert\ConnectionFactoryAssertDecorator
     arguments: ['@connection.factory.pdo.trust', '%pdo.config.required.fields%']
-  connection.factory.pdo: '@connection.factory.pdo.assert'
+  connection.factory.pdo:
+    alias: connection.factory.pdo.assert
+    tags:
+      - {name: connection.factory}
   database.factory.pdo:
     class: Vain\Pdo\Factory\PdoDatabaseFactory
     arguments: ['@database.generator.factory', 'pdo']
