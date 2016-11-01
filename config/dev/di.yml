@@ -1,0 +1,11 @@
+imports:
+  - { resource: '../di.yml' }
+
+parameters:
+  pdo.config.required.fields: ['type', 'host', 'port', 'dbname', 'username', 'password']
+
+services:
+  connection.factory.pdo:
+    class: Vain\Connection\Factory\Decorator\Assert\ConnectionFactoryAssertDecorator
+    decorates: connection.factory.pdo
+    arguments: ['@connection.factory.pdo.inner', '%pdo.config.required.fields%']
