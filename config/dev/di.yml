@@ -5,7 +5,7 @@ parameters:
   pdo.config.required.fields: ['type', 'host', 'port', 'dbname', 'username', 'password']
 
 services:
-  connection.factory.pdo:
+  connection.factory.pdo.assert:
     class: Vain\Connection\Factory\Decorator\Assert\ConnectionFactoryAssertDecorator
     decorates: connection.factory.pdo
-    arguments: ['@connection.factory.pdo.inner', '%pdo.config.required.fields%']
+    arguments: ['@connection.factory.pdo.assert.inner', '%pdo.config.required.fields%']
