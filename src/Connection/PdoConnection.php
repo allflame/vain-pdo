@@ -56,7 +56,10 @@ class PdoConnection extends AbstractConnection implements PdoConnectionInterface
             $dsn .= sprintf(';sslmode=%s', $sslmode);
         }
 
-        $options = [\PDO::ATTR_EMULATE_PREPARES => true];
+        $options = [
+            \PDO::ATTR_EMULATE_PREPARES => true,
+            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
+        ];
         $pdo = new \PDO($dsn, $username, $password, $options);
         if (defined('PDO::PGSQL_ATTR_DISABLE_PREPARES')
             && (!isset($driverOptions[\PDO::PGSQL_ATTR_DISABLE_PREPARES])
