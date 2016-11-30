@@ -70,13 +70,15 @@ class PdoDatabase extends AbstractDatabase implements MvccDatabaseInterface
     {
         if (0 < $this->level) {
             $this->level++;
-
             return true;
         }
+
         if (0 > $this->level) {
             throw new LevelIntegrityDatabaseException($this, $this->level);
         }
+
         try {
+            $this->level++;
             return $this->pdoConnection->establish()->beginTransaction();
         } catch (\PDOException $e) {
             throw new CommunicationPDODatabaseException($this, $e);
@@ -90,12 +92,13 @@ class PdoDatabase extends AbstractDatabase implements MvccDatabaseInterface
     {
         if (0 < $this->level) {
             $this->level--;
-
             return true;
         }
+
         if (0 < $this->level) {
             throw new LevelIntegrityDatabaseException($this, $this->level);
         }
+
         try {
             return $this->pdoConnection->establish()->commit();
         } catch (\PDOException $e) {
