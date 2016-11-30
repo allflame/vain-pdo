@@ -90,12 +90,13 @@ class PdoDatabase extends AbstractDatabase implements MvccDatabaseInterface
      */
     public function commitTransaction() : bool
     {
+        $this->level--;
+
         if (0 < $this->level) {
-            $this->level--;
             return true;
         }
 
-        if (0 < $this->level) {
+        if (0 > $this->level) {
             throw new LevelIntegrityDatabaseException($this, $this->level);
         }
 
@@ -111,14 +112,16 @@ class PdoDatabase extends AbstractDatabase implements MvccDatabaseInterface
      */
     public function rollbackTransaction() : bool
     {
-        if (0 < $this->level) {
-            $this->level--;
+        $this->level--;
 
+        if (0 < $this->level) {
             return true;
         }
-        if (0 < $this->level) {
+
+        if (0 > $this->level) {
             throw new LevelIntegrityDatabaseException($this, $this->level);
         }
+
         try {
             return $this->pdoConnection->establish()->rollBack();
         } catch (\PDOException $e) {
