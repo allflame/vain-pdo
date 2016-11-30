@@ -31,7 +31,7 @@ class PdoDatabase extends AbstractDatabase implements MvccDatabaseInterface
 {
     private $pdoConnection;
 
-    private $level;
+    private $level = 0;
 
     /**
      * PDOAdapter constructor.
