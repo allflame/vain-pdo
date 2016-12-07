@@ -10,13 +10,13 @@
  */
 declare(strict_types = 1);
 
-namespace Vain\Pdo\Factory;
+namespace Vain\Pdo\Database\Factory;
 
 use Vain\Connection\ConnectionInterface;
 use Vain\Database\DatabaseInterface;
 use Vain\Database\Factory\AbstractDatabaseFactory;
 use Vain\Database\Generator\Factory\GeneratorFactoryInterface;
-use Vain\Pdo\Connection\PdoConnectionInterface;
+use Vain\Pdo\Connection\PdoConnection;
 use Vain\Pdo\Database\PdoDatabase;
 
 /**
@@ -48,7 +48,7 @@ class PdoDatabaseFactory extends AbstractDatabaseFactory
     public function createDatabase(array $configData, ConnectionInterface $connection) : DatabaseInterface
     {
         /**
-         * @var PdoConnectionInterface $connection
+         * @var PdoConnection $connection
          */
         return new PdoDatabase($this->generatorFactory, $connection);
     }

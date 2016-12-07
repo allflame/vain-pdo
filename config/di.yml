@@ -8,12 +8,12 @@ services:
     arguments:
       - '%pdo.database%'
   connection.factory.pdo:
-    class: Vain\Pdo\Factory\PdoConnectionFactory
+    class: Vain\Pdo\Connection\Factory\PdoConnectionFactory
     arguments: ['pdo']
     tags:
       - {name: connection.factory}
   database.factory.pdo:
-    class: Vain\Pdo\Factory\PdoDatabaseFactory
+    class: Vain\Pdo\Database\Factory\PdoDatabaseFactory
     arguments: ['@database.generator.factory', 'pdo']
     tags:
       - {name: database.factory}

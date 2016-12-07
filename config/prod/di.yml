@@ -1,2 +1,8 @@
 imports:
   - { resource: '../di.yml' }
+services:
+  connection.factory.pdo.proxy:
+    class: Vain\Connection\Factory\Decorator\Proxy\ConnectionFactoryProxyDecorator
+    decorates: connection.factory.pdo
+    decoration_priority: 800
+    arguments: ['@connection.factory.pdo.proxy.inner']

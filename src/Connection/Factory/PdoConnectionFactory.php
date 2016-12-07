@@ -10,7 +10,7 @@
  */
 declare(strict_types = 1);
 
-namespace Vain\Pdo\Factory;
+namespace Vain\Pdo\Connection\Factory;
 
 use Vain\Connection\ConnectionInterface;
 use Vain\Connection\Factory\AbstractConnectionFactory;

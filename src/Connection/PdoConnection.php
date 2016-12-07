@@ -11,15 +11,27 @@
 
 namespace Vain\Pdo\Connection;
 
-use Vain\Connection\AbstractConnection;
+use Vain\Connection\ConnectionInterface;
 
 /**
  * Class PdoConnection
  *
  * @author Taras P. Girnyk <taras.p.gyrnik@gmail.com>
  */
-class PdoConnection extends AbstractConnection implements PdoConnectionInterface
+class PdoConnection implements ConnectionInterface
 {
+    private $config;
+
+    /**
+     * PdoConnection constructor.
+     *
+     * @param array $config
+     */
+    public function __construct(array $config)
+    {
+        $this->config = $config;
+    }
+
     /**
      * @param array $config
      *
@@ -43,12 +55,21 @@ class PdoConnection extends AbstractConnection implements PdoConnectionInterface
             $sslmode,
         ];
     }
+
     /**
      * @inheritDoc
      */
-    public function doConnect(array $configData)
+    public function getName() : string
     {
-        list ($type, $host, $port, $dbname, $username, $password, $sslmode) = $this->getCredentials($configData);
+        return $this->config['type'];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function establish()
+    {
+        list ($type, $host, $port, $dbname, $username, $password, $sslmode) = $this->getCredentials($this->config);
 
         $dsn = sprintf('%s:host=%s;port=%d;dbname=%s', $type, $host, $port, $dbname);
 
