@@ -38,11 +38,11 @@ class PdoDatabase extends AbstractDatabase implements MvccDatabaseInterface
      * PDOAdapter constructor.
      *
      * @param GeneratorFactoryInterface $generatorFactory
-     * @param PdoConnection             $connection
+     * @param ConnectionInterface       $connection
      */
     public function __construct(
         GeneratorFactoryInterface $generatorFactory,
-        PdoConnection $connection
+        ConnectionInterface $connection
     ) {
         $this->connection = $connection;
         parent::__construct($generatorFactory);
