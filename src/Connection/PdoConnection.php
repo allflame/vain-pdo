@@ -61,7 +61,7 @@ class PdoConnection implements ConnectionInterface
      */
     public function getName() : string
     {
-        return $this->config['type'];
+        return $this->config['driver'];
     }
 
     /**
