@@ -16,7 +16,6 @@ use Vain\Connection\ConnectionInterface;
 use Vain\Database\AbstractDatabase;
 use Vain\Database\Exception\LevelIntegrityDatabaseException;
 use Vain\Database\Mvcc\MvccDatabaseInterface;
-use Vain\Pdo\Connection\PdoConnection;
 use Vain\Pdo\Exception\CommunicationPdoDatabaseException;
 use Vain\Pdo\Exception\QueryPdoDatabaseException;
 use Vain\Database\Generator\Factory\GeneratorFactoryInterface;
