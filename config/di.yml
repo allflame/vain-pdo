@@ -3,8 +3,8 @@ services:
     parent: database.abstract
     class: Vain\Pdo\Database\PdoDatabase
   connection.factory.pdo:
+    parent: connection.factory.abstract
     class: Vain\Pdo\Connection\Factory\PdoConnectionFactory
-    arguments: ['pdo']
     tags:
       - {name: connection.factory}
   connection.factory.pdo.proxy:

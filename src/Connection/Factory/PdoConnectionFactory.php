@@ -26,8 +26,16 @@ class PdoConnectionFactory extends AbstractConnectionFactory
     /**
      * @inheritDoc
      */
-    public function createConnection(array $config) : ConnectionInterface
+    public function getName() : string
     {
-        return new PdoConnection($config);
+        return 'pdo';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createConnection(string $connectionName) : ConnectionInterface
+    {
+        return new PdoConnection($this->getConfigData($connectionName));
     }
 }
