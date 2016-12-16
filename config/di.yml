@@ -1,6 +1,5 @@
 parameters:
-  pdo.database.name: 'pdo'
-  connection.pdo.name: 'pdo'
+  connection.pdo.name: 'mvcc'
 
 services:
   database.pdo:
