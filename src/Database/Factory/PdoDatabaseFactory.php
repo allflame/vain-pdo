@@ -14,7 +14,7 @@ namespace Vain\Pdo\Database\Factory;
 
 use Vain\Core\Connection\ConnectionInterface;
 use Vain\Core\Database\DatabaseInterface;
-use Vain\Database\Factory\AbstractDatabaseFactory;
+use Vain\Core\Database\Factory\AbstractDatabaseFactory;
 use Vain\Core\Database\Generator\Factory\DatabaseGeneratorFactoryInterface;
 use Vain\Pdo\Connection\PdoConnection;
 use Vain\Pdo\Database\PdoDatabase;

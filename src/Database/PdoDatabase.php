@@ -13,9 +13,9 @@ declare(strict_types = 1);
 namespace Vain\Pdo\Database;
 
 use Vain\Core\Connection\ConnectionInterface;
-use Vain\Database\AbstractDatabase;
-use Vain\Database\Exception\LevelIntegrityDatabaseException;
-use Vain\Database\Mvcc\MvccDatabaseInterface;
+use Vain\Core\Database\AbstractDatabase;
+use Vain\Core\Exception\LevelIntegrityDatabaseException;
+use Vain\Core\Database\Mvcc\MvccDatabaseInterface;
 use Vain\Pdo\Exception\CommunicationPdoDatabaseException;
 use Vain\Pdo\Exception\QueryPdoDatabaseException;
 use Vain\Core\Database\Generator\Factory\DatabaseGeneratorFactoryInterface;

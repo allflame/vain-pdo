@@ -12,7 +12,7 @@ declare(strict_types = 1);
 
 namespace Vain\Pdo\Exception;
 
-use Vain\Database\Exception\DatabaseException;
+use Vain\Core\Exception\DatabaseException;
 use Vain\Pdo\Database\PdoDatabase;
 
 /**
