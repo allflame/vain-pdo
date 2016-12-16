@@ -18,7 +18,7 @@ services:
     tags:
       - {name: database.factory}
   connection.factory.pdo.proxy:
-    class: Vain\Connection\Factory\Decorator\Proxy\ConnectionFactoryProxyDecorator
+    class: Vain\Core\Connection\Factory\Decorator\Proxy\ConnectionFactoryProxyDecorator
     decorates: connection.factory.pdo
     decoration_priority: 100
     arguments: ['@connection.factory.pdo.proxy.inner']
