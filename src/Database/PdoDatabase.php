@@ -15,7 +15,6 @@ namespace Vain\Pdo\Database;
 use Vain\Core\Database\AbstractDatabase;
 use Vain\Core\Exception\LevelIntegrityDatabaseException;
 use Vain\Core\Database\Mvcc\MvccDatabaseInterface;
-use Vain\Pdo\Connection\PdoConnection;
 use Vain\Pdo\Exception\CommunicationPdoDatabaseException;
 use Vain\Pdo\Exception\QueryPdoDatabaseException;
 use Vain\Core\Database\Generator\DatabaseGeneratorInterface;
@@ -26,7 +25,7 @@ use Vain\Pdo\Cursor\PdoCursor;
  *
  * @author Taras P. Girnyk <taras.p.gyrnik@gmail.com>
  *
- * @method PdoConnection getConnection
+ * @method \PDO getConnection
  */
 class PdoDatabase extends AbstractDatabase implements MvccDatabaseInterface
 {
@@ -58,7 +57,7 @@ class PdoDatabase extends AbstractDatabase implements MvccDatabaseInterface
         try {
             $this->level++;
 
-            return $this->getConnection()->establish()->beginTransaction();
+            return $this->getConnection()->beginTransaction();
         } catch (\PDOException $e) {
             throw new CommunicationPDODatabaseException($this, $e);
         }
@@ -80,7 +79,7 @@ class PdoDatabase extends AbstractDatabase implements MvccDatabaseInterface
         }
 
         try {
-            return $this->getConnection()->establish()->commit();
+            return $this->getConnection()->commit();
         } catch (\PDOException $e) {
             throw new CommunicationPDODatabaseException($this, $e);
         }
@@ -102,7 +101,7 @@ class PdoDatabase extends AbstractDatabase implements MvccDatabaseInterface
         }
 
         try {
-            return $this->getConnection()->establish()->rollBack();
+            return $this->getConnection()->rollBack();
         } catch (\PDOException $e) {
             throw new CommunicationPDODatabaseException($this, $e);
         }
@@ -113,7 +112,7 @@ class PdoDatabase extends AbstractDatabase implements MvccDatabaseInterface
      */
     public function runQuery($query, array $bindParams, array $bindParamTypes = []) : DatabaseGeneratorInterface
     {
-        $statement = $this->getConnection()->establish()->prepare($query);
+        $statement = $this->getConnection()->prepare($query);
         if (false == $statement->execute($bindParams)) {
             throw new QueryPDODatabaseException($this, $statement->errorCode(), $statement->errorInfo());
         }
