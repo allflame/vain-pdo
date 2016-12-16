@@ -12,13 +12,12 @@ declare(strict_types = 1);
 
 namespace Vain\Pdo\Database;
 
-use Vain\Core\Connection\ConnectionInterface;
 use Vain\Core\Database\AbstractDatabase;
 use Vain\Core\Exception\LevelIntegrityDatabaseException;
 use Vain\Core\Database\Mvcc\MvccDatabaseInterface;
+use Vain\Pdo\Connection\PdoConnection;
 use Vain\Pdo\Exception\CommunicationPdoDatabaseException;
 use Vain\Pdo\Exception\QueryPdoDatabaseException;
-use Vain\Core\Database\Generator\Factory\DatabaseGeneratorFactoryInterface;
 use Vain\Core\Database\Generator\DatabaseGeneratorInterface;
 use Vain\Pdo\Cursor\PdoCursor;
 
@@ -26,34 +25,12 @@ use Vain\Pdo\Cursor\PdoCursor;
  * Class PDOAdapter
  *
  * @author Taras P. Girnyk <taras.p.gyrnik@gmail.com>
+ *
+ * @method PdoConnection getConnection
  */
 class PdoDatabase extends AbstractDatabase implements MvccDatabaseInterface
 {
-    private $connection;
-
     private $level = 0;
-
-    /**
-     * PDOAdapter constructor.
-     *
-     * @param DatabaseGeneratorFactoryInterface $generatorFactory
-     * @param ConnectionInterface       $connection
-     */
-    public function __construct(
-        DatabaseGeneratorFactoryInterface $generatorFactory,
-        ConnectionInterface $connection
-    ) {
-        $this->connection = $connection;
-        parent::__construct($generatorFactory);
-    }
-
-    /**
-     * @return ConnectionInterface
-     */
-    public function getConnection() : ConnectionInterface
-    {
-        return $this->connection;
-    }
 
     /**
      * @return int
@@ -81,7 +58,7 @@ class PdoDatabase extends AbstractDatabase implements MvccDatabaseInterface
         try {
             $this->level++;
 
-            return $this->connection->establish()->beginTransaction();
+            return $this->getConnection()->establish()->beginTransaction();
         } catch (\PDOException $e) {
             throw new CommunicationPDODatabaseException($this, $e);
         }
@@ -103,7 +80,7 @@ class PdoDatabase extends AbstractDatabase implements MvccDatabaseInterface
         }
 
         try {
-            return $this->connection->establish()->commit();
+            return $this->getConnection()->establish()->commit();
         } catch (\PDOException $e) {
             throw new CommunicationPDODatabaseException($this, $e);
         }
@@ -125,7 +102,7 @@ class PdoDatabase extends AbstractDatabase implements MvccDatabaseInterface
         }
 
         try {
-            return $this->connection->establish()->rollBack();
+            return $this->getConnection()->establish()->rollBack();
         } catch (\PDOException $e) {
             throw new CommunicationPDODatabaseException($this, $e);
         }
@@ -136,11 +113,11 @@ class PdoDatabase extends AbstractDatabase implements MvccDatabaseInterface
      */
     public function runQuery($query, array $bindParams, array $bindParamTypes = []) : DatabaseGeneratorInterface
     {
-        $statement = $this->connection->establish()->prepare($query);
+        $statement = $this->getConnection()->establish()->prepare($query);
         if (false == $statement->execute($bindParams)) {
             throw new QueryPDODatabaseException($this, $statement->errorCode(), $statement->errorInfo());
         }
 
-        return $this->getGeneratorFactory()->create($this, new PDOCursor($statement));
+        return $this->getGenerator(new PDOCursor($statement));
     }
 }

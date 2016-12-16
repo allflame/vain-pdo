@@ -1,22 +1,12 @@
-parameters:
-  pdo.database: 'mvcc'
-
 services:
-  database.mvcc:
-    class: PdoAdapter
-    factory: ['@database.storage', getDatabase]
-    arguments:
-      - '%pdo.database%'
+  database.pdo:
+    parent: database.abstract
+    class: Vain\Pdo\Database\PdoDatabase
   connection.factory.pdo:
     class: Vain\Pdo\Connection\Factory\PdoConnectionFactory
     arguments: ['pdo']
     tags:
       - {name: connection.factory}
-  database.factory.pdo:
-    class: Vain\Pdo\Database\Factory\PdoDatabaseFactory
-    arguments: ['@database.generator.factory', 'pdo']
-    tags:
-      - {name: database.factory}
   connection.factory.pdo.proxy:
     class: Vain\Core\Connection\Factory\Decorator\Proxy\ConnectionFactoryProxyDecorator
     decorates: connection.factory.pdo
