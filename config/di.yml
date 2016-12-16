@@ -1,12 +1,19 @@
+parameters:
+  pdo.database.name: 'pdo'
+
 services:
   database.pdo:
     parent: database.abstract
     class: Vain\Pdo\Database\PdoDatabase
+    arguments: ['@connection.pdo']
+  connection.pdo:
+    class: Vain\Pdo\Connection\PdoConnection
+    factory: ['@connection.factory.pdo', 'createConnection']
+    arguments:
+      - '%pdo.database.name%'
   connection.factory.pdo:
     parent: connection.factory.abstract
     class: Vain\Pdo\Connection\Factory\PdoConnectionFactory
-    tags:
-      - {name: connection.factory}
   connection.factory.pdo.proxy:
     class: Vain\Core\Connection\Factory\Decorator\Proxy\ConnectionFactoryProxyDecorator
     decorates: connection.factory.pdo
