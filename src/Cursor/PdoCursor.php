@@ -12,14 +12,14 @@ declare(strict_types = 1);
 
 namespace Vain\Pdo\Cursor;
 
-use Vain\Database\Cursor\CursorInterface;
+use Vain\Core\Database\Cursor\DatabaseCursorInterface;
 
 /**
  * Class PdoCursor
  *
  * @author Taras P. Girnyk <taras.p.gyrnik@gmail.com>
  */
-class PdoCursor implements CursorInterface
+class PdoCursor implements DatabaseCursorInterface
 {
     private $pdoStatementInstance;
 
@@ -64,7 +64,7 @@ class PdoCursor implements CursorInterface
     /**
      * @inheritDoc
      */
-    public function close() : CursorInterface
+    public function close() : DatabaseCursorInterface
     {
         $this->pdoStatementInstance->closeCursor();
 
@@ -74,7 +74,7 @@ class PdoCursor implements CursorInterface
     /**
      * @inheritDoc
      */
-    public function mode(int $mode) : CursorInterface
+    public function mode(int $mode) : DatabaseCursorInterface
     {
         $this->mode = $mode;
 

@@ -12,14 +12,14 @@ declare(strict_types = 1);
 
 namespace Vain\Pdo\Database;
 
-use Vain\Connection\ConnectionInterface;
+use Vain\Core\Connection\ConnectionInterface;
 use Vain\Database\AbstractDatabase;
 use Vain\Database\Exception\LevelIntegrityDatabaseException;
 use Vain\Database\Mvcc\MvccDatabaseInterface;
 use Vain\Pdo\Exception\CommunicationPdoDatabaseException;
 use Vain\Pdo\Exception\QueryPdoDatabaseException;
-use Vain\Database\Generator\Factory\GeneratorFactoryInterface;
-use Vain\Database\Generator\GeneratorInterface;
+use Vain\Core\Database\Generator\Factory\DatabaseGeneratorFactoryInterface;
+use Vain\Core\Database\Generator\DatabaseGeneratorInterface;
 use Vain\Pdo\Cursor\PdoCursor;
 
 /**
@@ -36,11 +36,11 @@ class PdoDatabase extends AbstractDatabase implements MvccDatabaseInterface
     /**
      * PDOAdapter constructor.
      *
-     * @param GeneratorFactoryInterface $generatorFactory
+     * @param DatabaseGeneratorFactoryInterface $generatorFactory
      * @param ConnectionInterface       $connection
      */
     public function __construct(
-        GeneratorFactoryInterface $generatorFactory,
+        DatabaseGeneratorFactoryInterface $generatorFactory,
         ConnectionInterface $connection
     ) {
         $this->connection = $connection;
@@ -134,7 +134,7 @@ class PdoDatabase extends AbstractDatabase implements MvccDatabaseInterface
     /**
      * @inheritDoc
      */
-    public function runQuery($query, array $bindParams, array $bindParamTypes = []) : GeneratorInterface
+    public function runQuery($query, array $bindParams, array $bindParamTypes = []) : DatabaseGeneratorInterface
     {
         $statement = $this->connection->establish()->prepare($query);
         if (false == $statement->execute($bindParams)) {

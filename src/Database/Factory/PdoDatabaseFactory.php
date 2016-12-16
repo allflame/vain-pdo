@@ -12,10 +12,10 @@ declare(strict_types = 1);
 
 namespace Vain\Pdo\Database\Factory;
 
-use Vain\Connection\ConnectionInterface;
-use Vain\Database\DatabaseInterface;
+use Vain\Core\Connection\ConnectionInterface;
+use Vain\Core\Database\DatabaseInterface;
 use Vain\Database\Factory\AbstractDatabaseFactory;
-use Vain\Database\Generator\Factory\GeneratorFactoryInterface;
+use Vain\Core\Database\Generator\Factory\DatabaseGeneratorFactoryInterface;
 use Vain\Pdo\Connection\PdoConnection;
 use Vain\Pdo\Database\PdoDatabase;
 
@@ -31,11 +31,11 @@ class PdoDatabaseFactory extends AbstractDatabaseFactory
     /**
      * PDODatabaseFactory constructor.
      *
-     * @param GeneratorFactoryInterface $generatorFactory
+     * @param DatabaseGeneratorFactoryInterface $generatorFactory
      * @param string                    $name
      */
     public function __construct(
-        GeneratorFactoryInterface $generatorFactory,
+        DatabaseGeneratorFactoryInterface $generatorFactory,
         $name
     ) {
         $this->generatorFactory = $generatorFactory;
