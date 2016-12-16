@@ -11,27 +11,15 @@
 
 namespace Vain\Pdo\Connection;
 
-use Vain\Core\Connection\ConnectionInterface;
+use Vain\Core\Connection\AbstractConnection;
 
 /**
  * Class PdoConnection
  *
  * @author Taras P. Girnyk <taras.p.gyrnik@gmail.com>
  */
-class PdoConnection implements ConnectionInterface
+class PdoConnection extends AbstractConnection
 {
-    private $config;
-
-    /**
-     * PdoConnection constructor.
-     *
-     * @param array $config
-     */
-    public function __construct(array $config)
-    {
-        $this->config = $config;
-    }
-
     /**
      * @param array $config
      *
@@ -59,17 +47,11 @@ class PdoConnection implements ConnectionInterface
     /**
      * @inheritDoc
      */
-    public function getName() : string
-    {
-        return $this->config['driver'];
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function establish()
     {
-        list ($type, $host, $port, $dbname, $username, $password, $sslmode) = $this->getCredentials($this->config);
+        list ($type, $host, $port, $dbname, $username, $password, $sslmode) = $this->getCredentials(
+            $this->getConfigData()
+        );
 
         $dsn = sprintf('%s:host=%s;port=%d;dbname=%s', $type, $host, $port, $dbname);
 
@@ -79,7 +61,7 @@ class PdoConnection implements ConnectionInterface
 
         $options = [
             \PDO::ATTR_EMULATE_PREPARES => true,
-            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
+            \PDO::ATTR_ERRMODE          => \PDO::ERRMODE_EXCEPTION,
         ];
         $pdo = new \PDO($dsn, $username, $password, $options);
         if (defined('PDO::PGSQL_ATTR_DISABLE_PREPARES')

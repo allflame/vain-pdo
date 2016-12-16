@@ -1,5 +1,6 @@
 parameters:
   pdo.database.name: 'pdo'
+  connection.pdo.name: 'pdo'
 
 services:
   database.pdo:
@@ -7,15 +8,8 @@ services:
     class: Vain\Pdo\Database\PdoDatabase
     arguments: ['@connection.pdo']
   connection.pdo:
+    parent: connection.abstract
     class: Vain\Pdo\Connection\PdoConnection
-    factory: ['@connection.factory.pdo', 'createConnection']
-    arguments:
-      - '%pdo.database.name%'
-  connection.factory.pdo:
-    parent: connection.factory.abstract
-    class: Vain\Pdo\Connection\Factory\PdoConnectionFactory
-  connection.factory.pdo.proxy:
-    class: Vain\Core\Connection\Factory\Decorator\Proxy\ConnectionFactoryProxyDecorator
-    decorates: connection.factory.pdo
-    decoration_priority: 100
-    arguments: ['@connection.factory.pdo.proxy.inner']
+    arguments: ['%connection.pdo.name%']
+    tags:
+      - {name: connection}
