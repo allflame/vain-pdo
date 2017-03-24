@@ -25,12 +25,18 @@ class PdoConnection extends AbstractConnection
      *
      * @return array
      */
-    protected function getCredentials(array $config) : array
+    protected function getCredentials(array $config): array
     {
         if (false === array_key_exists('sslmode', $config)) {
             $sslmode = '';
         } else {
             $sslmode = $config['sslmode'];
+        }
+
+        if (false === array_key_exists('timeout', $config)) {
+            $timeout = 1;
+        } else {
+            $timeout = $config['timeout'];
         }
 
         return [
@@ -41,6 +47,7 @@ class PdoConnection extends AbstractConnection
             $config['username'],
             $config['password'],
             $sslmode,
+            $timeout
         ];
     }
 
@@ -49,7 +56,7 @@ class PdoConnection extends AbstractConnection
      */
     public function establish()
     {
-        list ($type, $host, $port, $dbname, $username, $password, $sslmode) = $this->getCredentials(
+        list ($type, $host, $port, $dbname, $username, $password, $sslmode, $timeout) = $this->getCredentials(
             $this->getConfigData()
         );
 
@@ -60,9 +67,12 @@ class PdoConnection extends AbstractConnection
         }
 
         $options = [
-            \PDO::ATTR_EMULATE_PREPARES => true,
+            \PDO::ATTR_TIMEOUT          => $timeout,
             \PDO::ATTR_ERRMODE          => \PDO::ERRMODE_EXCEPTION,
+            \PDO::ATTR_EMULATE_PREPARES => true,
         ];
+        $driverOptions = [];
+
         $pdo = new \PDO($dsn, $username, $password, $options);
         if (defined('PDO::PGSQL_ATTR_DISABLE_PREPARES')
             && (!isset($driverOptions[\PDO::PGSQL_ATTR_DISABLE_PREPARES])
