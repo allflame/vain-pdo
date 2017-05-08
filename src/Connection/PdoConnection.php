@@ -54,7 +54,7 @@ class PdoConnection extends AbstractConnection
     /**
      * @inheritDoc
      */
-    public function establish()
+    public function doEstablish()
     {
         list ($type, $host, $port, $dbname, $username, $password, $sslmode, $timeout) = $this->getCredentials(
             $this->getConfigData()
